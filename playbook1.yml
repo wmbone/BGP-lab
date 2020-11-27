@@ -1,0 +1,16 @@
+# Test playbook1
+---
+- name: config
+  hosts: all
+  connection: local
+  gather_facts: true
+ 
+  tasks:
+    - name: napalm get_facts
+      napalm_get_facts:
+        filter: facts,interfaces
+        optional_args: { 'secret': cisco }
+
+    - debug:
+        var: napalm_facts
+        

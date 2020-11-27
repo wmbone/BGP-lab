@@ -1,0 +1,31 @@
+---
+- name: Run commands
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: show interface
+      cli_command:
+        command: "{{ show_interfaces }}"
+      register: command_output
+
+    - name: Print result
+      debug:
+        msg: "{{ command_output.stdout }}"
+
+    - name: show Run
+      cli_command:
+        command: show Run
+      register: running_output
+    
+    - name: Print Run
+      debug:
+        msg: "{{ running_output.stdout }}"
+
+    - name: save to config
+      local_action: copy content="{{ running_output.stdout }}"  dest=./config/show-running.cfg
+
+# Only return output is json will be available
+#    - name:  Print json
+#      debug:
+#        msg: "{{ command_output.json }}"

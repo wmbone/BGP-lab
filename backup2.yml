@@ -1,0 +1,34 @@
+---
+- hosts: all
+  connection: local
+  gather_facts: False
+  
+  roles:
+    - name: ansible-network.cisco_ios
+      function: config_manager/get
+      source: startup
+      register: backup
+
+  # tasks:
+  #   - name : print config keys
+  #     debug:
+  #       msg: "This is the config {{ ansible_facts.keys() }}"
+  
+    # - name : print config details
+    #   debug:
+    #     msg: "This is the config items {{ items }}"
+    #   with_dicts: {{ansible_facts}}
+    
+  tasks:
+    - name: Create backup dir
+      file:
+        path: "./config/{{ inventory_hostname }}-startup"
+        state: directory
+        recurse: yes
+    
+    - name: save config
+      copy:
+        content:
+          - "{{ backup.keys }}"
+        dest: ./config/{{ inventory_hostname }}-startup/startup.cfg
+

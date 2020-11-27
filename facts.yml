@@ -1,0 +1,61 @@
+---
+- name: config
+  hosts: all
+  connection: local
+  gather_facts: true
+ 
+  tasks:
+    - name: Gather facts
+      ios_facts:
+      when: ansible_network_os == 'ios'
+
+    - name: print facts
+      debug:
+        var: ansible_facts.keys()
+
+    - name: print facts details
+      debug:
+        msg: "Gather fact for {{ ansible_net_hostname }} and have following value {{ hostvars.ansible_net_version }} "
+      #      with_dict: "{{ ansible_facts.keys }}"
+      # with_items:
+      #   - "ansible_net_config"
+      #   - "ansible_net_hostname"
+      #   - "ansible_net_version"
+
+      # - debug:
+      #     var:
+      #       msg: "{{ item }}"
+      #   with_items:
+      #     - "{{ ansible_net_interfaces }}"
+      #     - "{{ ansible_net_config }}"
+    - name: show ip routes
+      ios_command:
+        commands: show ip route
+      register: routes
+
+    - name: display hostname
+      debug:
+        var: ansible_net_hostname
+    
+    - name: display routes
+      debug:
+        var: routes["stdout_lines"][0]
+
+    - name: display hostvars
+      debug:
+        var: hostvars['R2']
+    
+    - name: save facts
+      tags: facts
+      copy:
+        content: |
+          #jinja2 : lstrip_blocks:"True"
+          IOS device info:
+            {% for host in groups['routers'] %}
+            Hostname: {{ ansible_net_hostname }}
+            Version: {{ ansible_net_version }}
+            Model: {{ hostvars[host].ansible_net_model }}
+            Serial: {{ hostvars[host].ansible_net_serialnum }}
+            {% endfor %}
+        dest: ./config/{{ inventory_hostname }}.info
+      run_once: yes

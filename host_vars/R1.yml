@@ -1,0 +1,12 @@
+---
+hostname: R1
+bgp_as: 65000
+interfaces:
+- name: FastEhernet0/0
+  ip: 192.168.200.2
+
+#          - name: GigabitEthernet 1/0
+#            ip: 
+neighbors:
+- ip: 192.168.200.4
+  bgp_as: 65002

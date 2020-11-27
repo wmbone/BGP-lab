@@ -1,0 +1,10 @@
+---
+# main.yml
+
+- name: import ios collect config
+  import_playbook: backup.yml
+  when: ansible_network_os == 'ios'
+
+- name: import iosxe collect config
+  import_playbook: backup.yml
+  wehen: ansible_network_os == 'iosxe'

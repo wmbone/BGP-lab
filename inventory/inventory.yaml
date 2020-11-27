@@ -1,0 +1,27 @@
+---
+all:
+  children:
+    routers:
+      hosts:
+        R1: { ansible_host:192.168.201.2}
+
+        R2: { ansible_host:10.2.2.5}
+#        R3: { ansible_host:192.168.200.4}
+      vars:
+        ansible_python_interpreter: /usr/bin/python3
+        ansible_user: ansible
+        ansible_password: ansible
+        ansible_ssh_pass: ansible
+        ansible_network_os: ios
+        ansible_connection: network_cli
+        ansible_become: yes
+        ansible_become_method: enable
+        ansible_become_password: cisco
+#        ansible_become_user: cisco
+#        ansible_port: 22
+
+cisco:
+  children:
+    routers
+
+          

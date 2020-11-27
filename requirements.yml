@@ -1,0 +1,8 @@
+# from galaxy
+- src : ansible-network.network-engine
+  version: "2.7.5" # quote or us v2.7.5
+
+- src: ansible-network.cisco_ios
+  version: v2.7.1
+
+- src: ansible.netcommon
